@@ -1,12 +1,16 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-const initState = { showCart: false, products: [], totalToPay: 0 }; // {title: 'Test Item', amount: 1, totalPrice: 6}
+const initState = {
+  showCart: false,
+  products: [],
+  totalToPay: 0,
+}; // {title: 'Test Item', quantity: 1, price: 6, total: 6}
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState: initState,
   reducers: {
-    // ADD ITEM TO CART - we pass item {title: 'Test Item', amount: 1, totalPrice: 6}
+    // ADD ITEM TO CART - we pass item {title: 'Test Item', quantity: 1, price: 6, total: 6}
     addToCart(state, action) {
       const existingItemIndex = state.products.findIndex(
         (item) => item.id === action.payload.id
@@ -18,9 +22,8 @@ const cartSlice = createSlice({
         updProducts = [...state.products];
         updProducts[existingItemIndex] = {
           ...updProducts[existingItemIndex],
-          amount: updProducts[existingItemIndex].amount + 1,
-          totalPrice:
-            updProducts[existingItemIndex].totalPrice + action.payload.price,
+          quantity: updProducts[existingItemIndex].quantity + 1,
+          total: updProducts[existingItemIndex].total + action.payload.price,
         };
       } else {
         updProducts = [...state.products, action.payload];
@@ -39,13 +42,13 @@ const cartSlice = createSlice({
 
       const updProduct = {
         ...state.products[remItemIndex],
-        amount: state.products[remItemIndex].amount - 1,
-        totalPrice: state.products[remItemIndex].price - action.payload.price,
+        quantity: state.products[remItemIndex].quantity - 1,
+        total: state.products[remItemIndex].price - action.payload.price,
       };
 
       const updProducts = [...state.products];
 
-      if (updProduct.amount < 1) {
+      if (updProduct.quantity < 1) {
         updProduct.splice(remItemIndex, 1);
       } else {
         updProducts[remItemIndex] = updProduct;
