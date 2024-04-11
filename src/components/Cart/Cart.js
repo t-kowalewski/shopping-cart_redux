@@ -7,6 +7,8 @@ const Cart = (props) => {
   const cartItems = useSelector((store) => store.products);
   const cartIsEmpty = cartItems.length === 0;
 
+  //  add logic to show text for empty cart
+
   return (
     <Card className={classes.cart}>
       <h2>Your Shopping Cart</h2>

@@ -13,7 +13,7 @@ const cartSlice = createSlice({
     // ADD ITEM TO CART - we pass item {title: 'Test Item', quantity: 1, price: 6, total: 6}
     addToCart(state, action) {
       const existingItemIndex = state.products.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item.title === action.payload.title
       );
 
       let updProducts;
@@ -37,19 +37,19 @@ const cartSlice = createSlice({
     // DELETE ITEM FROM CART - we pass id & item price {id: 'p1', price: 6}
     delFromCart(state, action) {
       const remItemIndex = state.products.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item.title === action.payload.title
       );
 
       const updProduct = {
         ...state.products[remItemIndex],
         quantity: state.products[remItemIndex].quantity - 1,
-        total: state.products[remItemIndex].price - action.payload.price,
+        total: state.products[remItemIndex].total - action.payload.price,
       };
 
       const updProducts = [...state.products];
 
       if (updProduct.quantity < 1) {
-        updProduct.splice(remItemIndex, 1);
+        updProducts.splice(remItemIndex, 1);
       } else {
         updProducts[remItemIndex] = updProduct;
       }
