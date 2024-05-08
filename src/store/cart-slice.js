@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initState = {
   products: [],
+  totalQuantity: 0,
   totalToPay: 0,
 }; // {title: 'Test Item', quantity: 1, price: 6, total: 6}
 
@@ -28,9 +29,15 @@ export const cartSlice = createSlice({
         updProducts = [...state.products, action.payload];
       }
 
-      // logic to calc totalToPay
-
       state.products = updProducts;
+
+      // logic to calc totalQuantity
+      state.totalQuantity = updProducts.reduce(
+        (acc, item) => acc + item.quantity,
+        0
+      );
+
+      // logic to calc totalToPay
     },
 
     // DELETE ITEM FROM CART - we pass item object (based on 'products array')
@@ -52,6 +59,9 @@ export const cartSlice = createSlice({
       } else {
         updProducts[remItemIndex] = updProduct;
       }
+
+      // logic to calc totalQuantity
+      state.totalQuantity--;
 
       // logic to calc totalToPay
 
