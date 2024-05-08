@@ -4,7 +4,7 @@ import classes from './Cart.module.css';
 import CartItem from './CartItem';
 
 const Cart = (props) => {
-  const cartItems = useSelector((store) => store.products);
+  const cartItems = useSelector((store) => store.cart.products);
   const cartIsEmpty = cartItems.length === 0;
 
   return (
