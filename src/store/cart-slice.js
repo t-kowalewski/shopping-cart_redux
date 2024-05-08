@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initState = {
-  products: [],
+  products: [], // {title: 'Test Item', quantity: 1, price: 6, total: 6}
   totalQuantity: 0,
   totalToPay: 0,
-}; // {title: 'Test Item', quantity: 1, price: 6, total: 6}
+};
 
 export const cartSlice = createSlice({
   name: 'cart',
   initialState: initState,
   reducers: {
-    // ADD ITEM TO CART - we pass item {title: 'Test Item', quantity: 1, price: 6, total: 6}
+    // ADD ITEM TO CART - we pass item {id: 'p1', title: 'Test Item', price: 6}
     addToCart(state, action) {
       const existingItemIndex = state.products.findIndex(
         (item) => item.title === action.payload.title
@@ -26,7 +26,16 @@ export const cartSlice = createSlice({
           total: updProducts[existingItemIndex].total + action.payload.price,
         };
       } else {
-        updProducts = [...state.products, action.payload];
+        updProducts = [
+          ...state.products,
+          {
+            id: action.payload.id,
+            title: action.payload.title,
+            quantity: 1,
+            price: action.payload.price,
+            total: action.payload.price,
+          },
+        ];
       }
 
       state.products = updProducts;
@@ -37,16 +46,18 @@ export const cartSlice = createSlice({
       // logic to calc totalToPay
     },
 
-    // DELETE ITEM FROM CART - we pass item object (based on 'products array')
+    // DELETE ITEM FROM CART - we pass id
     delFromCart(state, action) {
       const remItemIndex = state.products.findIndex(
-        (item) => item.title === action.payload.title
+        (item) => item.id === action.payload
       );
 
       const updProduct = {
         ...state.products[remItemIndex],
         quantity: state.products[remItemIndex].quantity - 1,
-        total: state.products[remItemIndex].total - action.payload.price,
+        total:
+          state.products[remItemIndex].total -
+          state.products[remItemIndex].price,
       };
 
       const updProducts = [...state.products];
