@@ -32,10 +32,7 @@ export const cartSlice = createSlice({
       state.products = updProducts;
 
       // logic to calc totalQuantity
-      state.totalQuantity = updProducts.reduce(
-        (acc, item) => acc + item.quantity,
-        0
-      );
+      state.totalQuantity++;
 
       // logic to calc totalToPay
     },
@@ -60,12 +57,12 @@ export const cartSlice = createSlice({
         updProducts[remItemIndex] = updProduct;
       }
 
+      state.products = updProducts;
+
       // logic to calc totalQuantity
       state.totalQuantity--;
 
       // logic to calc totalToPay
-
-      state.products = updProducts;
     },
   },
 });
