@@ -16,29 +16,18 @@ export const cartSlice = createSlice({
         (item) => item.title === action.payload.title
       );
 
-      let updProducts;
-
       if (existingItemIndex !== -1) {
-        updProducts = [...state.products];
-        updProducts[existingItemIndex] = {
-          ...updProducts[existingItemIndex],
-          quantity: updProducts[existingItemIndex].quantity + 1,
-          total: updProducts[existingItemIndex].total + action.payload.price,
-        };
+        state.products[existingItemIndex].quantity++;
+        state.products[existingItemIndex].total += action.payload.price;
       } else {
-        updProducts = [
-          ...state.products,
-          {
-            id: action.payload.id,
-            title: action.payload.title,
-            quantity: 1,
-            price: action.payload.price,
-            total: action.payload.price,
-          },
-        ];
+        state.products.push({
+          id: action.payload.id,
+          title: action.payload.title,
+          quantity: 1,
+          price: action.payload.price,
+          total: action.payload.price,
+        });
       }
-
-      state.products = updProducts;
 
       // logic to calc totalQuantity
       state.totalQuantity++;
@@ -52,23 +41,12 @@ export const cartSlice = createSlice({
         (item) => item.id === action.payload
       );
 
-      const updProduct = {
-        ...state.products[remItemIndex],
-        quantity: state.products[remItemIndex].quantity - 1,
-        total:
-          state.products[remItemIndex].total -
-          state.products[remItemIndex].price,
-      };
+      state.products[remItemIndex].quantity--;
+      state.products[remItemIndex].total -= state.products[remItemIndex].price;
 
-      const updProducts = [...state.products];
-
-      if (updProduct.quantity < 1) {
-        updProducts.splice(remItemIndex, 1);
-      } else {
-        updProducts[remItemIndex] = updProduct;
+      if (state.products[remItemIndex].quantity < 1) {
+        state.products.splice(remItemIndex, 1);
       }
-
-      state.products = updProducts;
 
       // logic to calc totalQuantity
       state.totalQuantity--;
