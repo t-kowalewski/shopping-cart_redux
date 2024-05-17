@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { uiActions } from './ui-slice';
 
 const initState = {
   products: [], // {title: 'Test Item', quantity: 1, price: 6, total: 6}
@@ -55,5 +56,54 @@ export const cartSlice = createSlice({
     },
   },
 });
+
+// Our custom "thunk", action creator (separate, standalone function)
+export const sendCartData = (cartData) => {
+  // we have to return a function instead of an object
+  // (like it is in a "built-in" action creators)
+  return async (dispatch) => {
+    dispatch(
+      uiActions.showNotification({
+        status: 'pending',
+        title: 'Sending...',
+        message: 'Sending cart data',
+      })
+    );
+
+    try {
+      const resp = await fetch(
+        // link to test db: url/cart.json
+        'https://redux-cart-test-default-rtdb.europe-west1.firebasedatabase.app/cart.json',
+        {
+          method: 'PUT',
+          body: JSON.stringify(cartData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!resp.ok) {
+        throw new Error('Failed updating cart');
+      }
+
+      dispatch(
+        uiActions.showNotification({
+          status: 'success',
+          title: 'Done',
+          message: 'Data successfuly sent',
+        })
+      );
+    } catch (error) {
+      dispatch(
+        uiActions.showNotification({
+          status: 'error',
+          title: 'Error',
+          message: 'Failed sending cart data',
+        })
+      );
+    }
+  };
+};
 
 export const cartActions = cartSlice.actions;
