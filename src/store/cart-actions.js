@@ -10,8 +10,8 @@ export const sendCartData = (cartData) => {
     dispatch(
       uiActions.showNotification({
         status: 'pending',
-        title: 'Sending...',
-        message: 'Sending cart data',
+        title: 'Saving...',
+        message: 'Saving cart data',
       })
     );
 
@@ -29,14 +29,14 @@ export const sendCartData = (cartData) => {
       );
 
       if (!resp.ok) {
-        throw new Error('Failed updating cart');
+        throw new Error('Failed saving cart data');
       }
 
       dispatch(
         uiActions.showNotification({
           status: 'success',
           title: 'Done',
-          message: 'Data successfuly sent',
+          message: 'Cart data successfuly saved',
         })
       );
     } catch (error) {
@@ -44,7 +44,7 @@ export const sendCartData = (cartData) => {
         uiActions.showNotification({
           status: 'error',
           title: 'Error',
-          message: 'Failed sending cart data',
+          message: 'Failed saving cart data',
         })
       );
     }

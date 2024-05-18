@@ -13,6 +13,7 @@ export const uiSlice = createSlice({
     toggleCart(state) {
       state.showCart = !state.showCart;
     },
+
     // SET NOTIFICATION
     showNotification(state, action) {
       state.notification = {
@@ -20,6 +21,11 @@ export const uiSlice = createSlice({
         title: action.payload.title,
         message: action.payload.message,
       };
+    },
+
+    // HIDE NOTIFICATION
+    hideNotification(state) {
+      state.notification = null;
     },
   },
 });

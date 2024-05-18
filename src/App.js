@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCartData, sendCartData } from './store/cart-actions';
+import { uiActions } from './store/ui-slice';
 
 import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
@@ -20,9 +21,20 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
+    let notificationTimeout;
+
     if (cart.wasChanged) {
       dispatch(sendCartData(cart));
+
+      // logic to hide notification
+      notificationTimeout = setTimeout(() => {
+        dispatch(uiActions.hideNotification());
+      }, 5000);
     }
+
+    return () => {
+      clearTimeout(notificationTimeout);
+    };
   }, [cart, dispatch]);
 
   return (
