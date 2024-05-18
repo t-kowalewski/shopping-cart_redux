@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { sendCartData } from './store/cart-slice';
+import { getCartData, sendCartData } from './store/cart-actions';
 
 import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import PRODUCTS from './products';
 import Notification from './components/UI/Notification';
+
+let initRender = true;
 
 function App() {
   const showCart = useSelector((store) => store.ui.showCart);
@@ -16,11 +18,15 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (cart.totalQuantity === 0) {
+    if (initRender) {
+      initRender = false;
+      dispatch(getCartData());
       return;
     }
 
-    dispatch(sendCartData(cart));
+    if (cart.wasChanged) {
+      dispatch(sendCartData(cart));
+    }
   }, [cart, dispatch]);
 
   return (
