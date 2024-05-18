@@ -8,8 +8,6 @@ import Products from './components/Shop/Products';
 import PRODUCTS from './products';
 import Notification from './components/UI/Notification';
 
-let initRender = true;
-
 function App() {
   const showCart = useSelector((store) => store.ui.showCart);
   const cart = useSelector((store) => store.cart);
@@ -18,12 +16,10 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (initRender) {
-      initRender = false;
-      dispatch(getCartData());
-      return;
-    }
+    dispatch(getCartData());
+  }, [dispatch]);
 
+  useEffect(() => {
     if (cart.wasChanged) {
       dispatch(sendCartData(cart));
     }
